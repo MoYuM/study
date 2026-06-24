@@ -17,6 +17,6 @@
 
 ## commit 规范
 
-- 一次陪练 = 一个 commit；内容（`banks/`）与进度（`progress/`）分开提交。
+- 改完即提交：每写回一次 `progress/`（或改一次 `banks/`）就立即提交那一笔，不攒到陪练结束再批量提交；内容（`banks/`）与进度（`progress/`）分开提交。
 - 前缀：`drill(<题库>):` 进度更新 ／ `bank(<题库>):` 题库增改 ／ `chore:`·`docs:`·`refactor:` 工具文档结构。
 - 只本地提交，不 push（除非用户要求）。
