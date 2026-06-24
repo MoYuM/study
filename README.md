@@ -13,6 +13,7 @@ study-drill/
   progress/
     前端面试.tsv                  # 学习进度：id ⇄ 掌握/下次复习/上次评测/备注（仅评过的题）
   lint.py                         # 题库 + 进度规范检查
+  stats.py                        # 跨题库进度概览（python3 stats.py）
   .githooks/pre-commit            # commit 前自动 lint
   .claude/skills/mastery-drill/   # 陪练 skill（项目级）
   README.md
@@ -59,6 +60,14 @@ id	掌握	下次复习	上次评测	备注
 ## 用陪练
 
 在本目录（`study-drill/`）下启动 Claude Code，首次 `/reload-skills`，然后说「开始陪练」「复习今天到期的」「练前端面试 AI 高频」「模拟面试」。Claude 会读题库内容 + 进度选题，盖答案考你、追问、揭晓打分，把结果写回 `progress/<题库>.tsv`。
+
+## 看进度
+
+```bash
+python3 stats.py
+```
+
+显示各题库的总题数 / 未评测 / 🔴🟡🟢⭐ 分布 / 到期(下次复习≤今天)数 / 分类分布，外加总计。
 
 ## git + lint
 
