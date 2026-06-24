@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# 题库规范检查：lint 不通过则阻止本次提交。
+root="$(git rev-parse --show-toplevel)"
+exec python3 "$root/lint.py"
