@@ -9,3 +9,4 @@ id	掌握	下次复习	上次评测	备注
 385e29bd-9121-81df-8456-f9e98c74cf6e	🟡夹生	2026-06-27	2026-06-24	API层很好(useRef不触发渲染/useCallback是useMemo语法糖都准);原理完全空白:需背hooks链表挂Fiber按调用顺序匹配→这才是"不能放if/循环"铁律的根因;漏useRef拿DOM/useEffect清理函数+依赖数组/闭包陷阱函数式更新
 385e29bd-9121-8195-bc0a-fcee10b17a47	🔴生疏	2026-06-25	2026-06-24	完全空白;主线:BFC=独立渲染结界,overflow:hidden/flow-root触发,用来清浮动/防margin折叠/自适应两栏;坑:flex/grid是FFC/GFC不是BFC但也能清浮动防折叠
 385e29bd-9121-81d4-af83-f34b5858cec8	🔴生疏	2026-06-25	2026-06-24	完全空白;主线:实例__proto__→构造函数prototype→逐级上查→顶层Object.prototype(__proto__为null);三角关系prototype(函数的)/__proto__(对象的)/constructor(指回);坑:Object.create(null)无原型,instanceof本质查原型链
+385e29bd-9121-8104-a226-feb1f4643274	🟢熟练	2026-07-02	2026-06-25	主干扎实(返回Promise/await后续进微任务/Promise.all fail-fast只捕获最先报错那个);原理缺口:语法糖本质是Generator+自动执行器(状态机)说不出;边界缺allSettled补位(拿全部结果不整体挂)
