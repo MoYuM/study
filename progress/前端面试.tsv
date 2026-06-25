@@ -9,3 +9,4 @@ id	掌握	下次复习	上次评测	备注
 385e29bd-9121-81df-8456-f9e98c74cf6e	🟡夹生	2026-06-27	2026-06-24	API层很好(useRef不触发渲染/useCallback是useMemo语法糖都准);原理完全空白:需背hooks链表挂Fiber按调用顺序匹配→这才是"不能放if/循环"铁律的根因;漏useRef拿DOM/useEffect清理函数+依赖数组/闭包陷阱函数式更新
 385e29bd-9121-8195-bc0a-fcee10b17a47	🟡夹生	2026-06-28	2026-06-25	从完全空白到能诊断高度塌陷+知道用flow-root。关键纠正:BFC要开在父容器上(谁包住浮动给谁开),加子元素无效。掌握:BFC=独立结界,解决①清浮动防塌陷②防margin折叠③自适应两栏;触发overflow非visible/flow-root(首选无副作用)/float/定位;坑:flex是FFC不是BFC但效果类似
 385e29bd-9121-81d4-af83-f34b5858cec8	🔴生疏	2026-06-26	2026-06-25	主干搭起(三名词prototype/__proto__/constructor+查找过程+顶层Object.prototype→null);核心坑:Person.prototype.__proto__是Object.prototype不是Function.prototype;区分函数本身(.__proto__=Function.prototype)与给实例的prototype对象
+061dc36e-0be7-4ca1-9b04-2f79fed6e23b	🟢熟练	2026-07-02	2026-06-25	方法列全4流派(flex/绝对定位/auto margin/transform)。精确点:绝对定位+transform居中,top/left的50%相对父元素、transform的-50%相对子元素自身(故无需知子元素尺寸);先把左上角送到中心再回拉自身一半。首选flex(或grid place-items:center);margin:auto法需定宽高
