@@ -33,3 +33,4 @@ f7b79b6c-7a75-4b16-a6a0-2f2ddbc868d1	🟢熟练	2026-07-03	2026-06-26	概念准+
 385e29bd-9121-81fa-98c6-eb412c25fcee	🔴生疏	2026-06-27	2026-06-26	未作答;流水线:提问→QueryRewrite(改口语化/多意图/缩写/省略,HyDE/Self-Query)→HybridSearch检索(BM25关键词+向量语义融合,治术语/编号精确匹配)→Rerank重排(向量相似≠相关,cross-encoder精排top-k)→喂模型;锚:Rewrite管入口/Hybrid管召回/Rerank管排序
 e4c38e48-78b5-4c15-b0ba-1e2991eb3c83	🟢熟练	2026-07-03	2026-06-26	第1轮🔴重练即🟢(主动回忆见效);核心三件套答准(计数+队列+补位),追问答对补位挂finally不挂then(then失败不补位会卡死位置);短板:未完整口述关键代码(未满直接跑/满了入队);题库另一写法用Promise.race等任意完成再递归schedule;下次能默写=⭐
 8cdafe1c-4ce9-494b-bc25-0028cb48a721	🔴生疏	2026-06-27	2026-06-26	只答出"lodash类型支持差"(属生态库缺d.ts,非语言陷阱);追问as/unknown均不知;必记:as只骗编译器运行时不转换断错埋雷,优先类型收窄;any传染绕过检查→优先unknown+收窄;其他坑:enum运行时产物用const enum/联合字面量替代,非空断言!滥用,interface vs type
+68a09896-57d1-43a1-b1c7-d9c5193e21e3	🔴生疏	2026-06-27	2026-06-26	四核心概念答准(entry起点/output产物位置/loader转非JS资源/plugin生命周期钩子做loader做不到的);但流程"忘了":依赖图递归收集模块+用自己运行时__webpack_require__改写import/require拼bundle都不知;锚:entry→依赖图递归→loader转换/plugin扩展→运行时拼bundle
