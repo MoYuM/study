@@ -50,3 +50,4 @@ a5fdfe80-04fd-4599-9794-2bc4c9c56501	🟢熟练	2026-07-04	2026-06-27	方案和C
 8d3925dd-3992-456b-8326-dd9c34ac3a1f	🟡夹生	2026-06-30	2026-06-27	埋点分类/Beacon/Image原理都对；漏：工程注意点(采样率/批量上报/性能异步/隐私合规)+Image只GET有URL长度限制
 385e29bd-9121-81dc-a83e-c0970017fd15	🟡夹生	2026-06-30	2026-06-27	骨架屏/SSR/内联CSS/chunk/CDN都对；漏：路由懒加载=动态import()自动分chunk；Tree Shaking；preload关键资源；FCP/LCP监控定位根因
 385e29bd-9121-81c1-bdec-c53fde29e361	🔴生疏	2026-06-28	2026-06-27	未作答；必记：Vue2=defineProperty初始化递归劫持属性，盲区(新增/删/数组索引)要Vue.set+重写数组方法；Vue3=Proxy代理整对象+惰性递归+track/trigger，全覆盖无盲区
+385e29bd-9121-8183-b658-ce40be30d9e3	🔴生疏	2026-06-28	2026-06-27	未作答；必背：clearTimeout+setTimeout；immediate=true时用!timer判断首次立刻执行；回调里timer=null是关键否则只执行一次再也不能立即触发
