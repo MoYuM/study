@@ -46,3 +46,4 @@ a31c2f13-632b-4512-a52b-83211c220a76	🔴生疏	2026-06-27	2026-06-26	未作答;
 b96afdf3-c529-482c-9d4c-5c361ac15c4c	🔴生疏	2026-06-28	2026-06-27	只知道用DevTools，具体面板/流程/泄漏原因全空白；必背：Performance看堆折线+Memory快照对比；泄漏原因：定时器/事件监听未清/游离DOM/闭包持大对象
 a5fdfe80-04fd-4599-9794-2bc4c9c56501	🟢熟练	2026-07-04	2026-06-27	方案和CORS概念扎实;漏：简单/复杂请求判定条件(方法+Content-Type+自定义Header)+请求已发出是响应被拦截这个误区
 83245874-1f50-4d5c-af43-2969f71cb071	🔴生疏	2026-06-28	2026-06-27	"知道Array.isArray/instanceof/typeof三种但没说各自坑；必记：typeof[]=""object""不能判断；instanceof跨iframe失效；Array.isArray最可靠；Object.prototype.toString最通用"
+385e29bd-9121-819a-a793-c1c31f1a3b2c	🔴生疏	2026-06-28	2026-06-27	三概念方向对但深度差；必记：上下文越大不越好(Lost in Middle/成本/噪声)；temperature=0贪心→代码/JSON，=1发散→创意；top_p和temperature二选一别同时调；生产调低temperature
