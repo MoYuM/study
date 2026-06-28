@@ -5,10 +5,12 @@
 结构：
   banks/<题库名>/meta.yml            题库元信息（名称 / 分类清单 / 可选字段枚举）
   banks/<题库名>/<分类>/<题目>.md     纯内容：frontmatter(题目/分类/id + 声明的可选字段) + 答案正文
-  progress/<题库名>.tsv              学习进度：id ⇄ 掌握/下次复习/上次评测/备注（仅评过的题）
+  progress/<题库名>/<id>.md          学习进度（Obsidian Bases 数据源）：每题一份，
+                                     frontmatter 存 掌握/下次复习/上次评测/备注
+  progress/<题库名>.base             Obsidian Bases 视图（YAML），不参与 lint
 
 校验：题库 frontmatter 合规、分类/可选字段取值合法、id 唯一、**题库里不得混入进度字段**；
-进度 TSV 每行 id 必须在题库中存在、掌握档位合法、日期合法、评测态一致。
+进度 md 的 id 必须在题库中存在且不重复、文件名与 id 一致、掌握档位合法、日期合法、评测态一致。
 有错误 → 退出码 1（被 pre-commit 拦下）；只有警告 → 退出码 0。
 """
 import os, re, sys, glob, datetime
@@ -98,7 +100,7 @@ def lint_bank(bankdir):
                 err(f"{rel(p)}: 缺字段 `{k}`")
         for k in fm:
             if k in PROGRESS_FIELDS:
-                err(f"{rel(p)}: 题库里不得出现进度字段 `{k}`（应放 progress/{name}.tsv）")
+                err(f"{rel(p)}: 题库里不得出现进度字段 `{k}`（应放 progress/{name}/<id>.md）")
             elif k not in allowed and k not in SYSTEM_FIELDS:
                 warn(f"{rel(p)}: 未知字段 `{k}`（meta 未声明）")
         cat = fm.get("分类", "")
@@ -124,26 +126,37 @@ def lint_bank(bankdir):
     return name, ids
 
 
-def lint_progress(path, bank_ids):
-    lines = open(path, encoding="utf-8").read().rstrip("\n").split("\n")
-    if not lines or lines[0].split("\t") != ["id", "掌握", "下次复习", "上次评测", "备注"]:
-        err(f"{rel(path)}: 表头必须是 id\\t掌握\\t下次复习\\t上次评测\\t备注"); return
+def lint_progress_dir(progress_dir, bank_ids):
+    """校验 progress/<题库>/*.md 进度文件（Obsidian Bases 数据源）。"""
     seen = set()
-    for i, ln in enumerate(lines[1:], 2):
-        cols = ln.split("\t")
-        if len(cols) != 5:
-            err(f"{rel(path)}:{i}: 列数应为 5，实际 {len(cols)}"); continue
-        nid, lvl, nxt, last, _ = cols
+    for p in sorted(glob.glob(os.path.join(progress_dir, "*.md"))):
+        fm, _ = parse_fm(open(p, encoding="utf-8").read())
+        if fm is None:
+            err(f"{rel(p)}: 缺/坏 frontmatter"); continue
+        nid = fm.get("id", "")
+        fname_id = os.path.splitext(os.path.basename(p))[0]
+        if not nid or not UUID_RE.match(nid):
+            err(f"{rel(p)}: id `{nid}` 不是合法 uuid"); continue
+        if nid != fname_id:
+            err(f"{rel(p)}: 文件名应为 <id>.md，与 id `{nid}` 不一致")
         if nid not in bank_ids:
-            err(f"{rel(path)}:{i}: id `{nid}` 在题库中不存在（孤儿进度）")
+            err(f"{rel(p)}: id `{nid}` 在题库中不存在（孤儿进度）")
         if nid in seen:
-            err(f"{rel(path)}:{i}: id `{nid}` 在进度里重复")
+            err(f"{rel(p)}: id `{nid}` 在进度里重复")
         seen.add(nid)
-        if lvl not in LEVELS:
-            err(f"{rel(path)}:{i}: 掌握 `{lvl}` 非法")
+        lvl = fm.get("掌握", "")
+        if lvl not in LEVELS and lvl != "🆕未评测":
+            err(f"{rel(p)}: 掌握 `{lvl}` 非法（应为 🆕未评测 或 {sorted(LEVELS)} 之一）")
+        nxt, last = fm.get("下次复习", ""), fm.get("上次评测", "")
         for label, d in (("下次复习", nxt), ("上次评测", last)):
-            if not valid_date(d):
-                err(f"{rel(path)}:{i}: {label} `{d}` 不是合法 YYYY-MM-DD")
+            if d and not valid_date(d):
+                err(f"{rel(p)}: {label} `{d}` 不是合法 YYYY-MM-DD")
+        # 评测态一致性：未评测不该带日期；已评测应有复习/评测日期
+        if lvl == "🆕未评测":
+            if nxt or last:
+                warn(f"{rel(p)}: 🆕未评测 却带了 下次复习/上次评测 日期")
+        elif lvl in LEVELS and not (nxt and last):
+            warn(f"{rel(p)}: 已评测（{lvl}）但缺 下次复习/上次评测 日期")
 
 
 def main():
@@ -155,15 +168,15 @@ def main():
     for bd in sorted(bank_dirs):
         name, ids = lint_bank(bd)
         total_q += len(ids)
-        prog = os.path.join(PROGRESS, f"{name}.tsv")
-        if os.path.exists(prog):
-            lint_progress(prog, ids)
-            known_progress.add(os.path.basename(prog))
-    # 孤儿进度文件（没有对应题库）
+        prog_dir = os.path.join(PROGRESS, name)
+        if os.path.isdir(prog_dir):
+            lint_progress_dir(prog_dir, ids)
+            known_progress.add(name)
+    # 孤儿进度目录（没有对应题库）
     if os.path.isdir(PROGRESS):
-        for p in glob.glob(os.path.join(PROGRESS, "*.tsv")):
-            if os.path.basename(p) not in known_progress:
-                warn(f"{rel(p)}: 没有同名题库")
+        for d in glob.glob(os.path.join(PROGRESS, "*")):
+            if os.path.isdir(d) and os.path.basename(d) not in known_progress:
+                warn(f"{rel(d)}: 没有同名题库")
 
     for w in warnings:
         print(f"⚠️  {w}")

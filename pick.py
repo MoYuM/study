@@ -2,7 +2,7 @@
 """
 快速出题（盖答案选题器）—— 通用多题库版。
 
-把题库内容（banks/）与学习进度（obsidian-db/<题库>/<id>.md frontmatter）按 id 关联，
+把题库内容（banks/）与学习进度（progress/<题库>/<id>.md frontmatter）按 id 关联，
 按 mastery-drill 的优先级挑题，**只输出题目元信息 + 文件路径，绝不打印答案正文**
 （盖答案是主动回忆的前提）。
 
@@ -63,10 +63,10 @@ def parse_fm(text):
 def read_progress(bank):
     """返回 {id: {掌握, 下次复习, 上次评测, 备注}}，读 progress/<bank>/*.md frontmatter。"""
     rows = {}
-    odb_dir = os.path.join(PROGRESS, bank)
-    if not os.path.isdir(odb_dir):
+    prog_dir = os.path.join(PROGRESS, bank)
+    if not os.path.isdir(prog_dir):
         return rows
-    for p in glob.glob(os.path.join(odb_dir, "*.md")):
+    for p in glob.glob(os.path.join(prog_dir, "*.md")):
         fm = parse_fm(open(p, encoding="utf-8").read())
         if not fm or not fm.get("id"):
             continue

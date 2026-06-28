@@ -13,11 +13,11 @@
             "state": {
               "type": "bases",
               "state": {
-                "file": "未命名.base",
-                "viewName": "表格"
+                "file": "progress/前端面试.base",
+                "viewName": "全部题目"
               },
               "icon": "lucide-table",
-              "title": "未命名"
+              "title": "前端面试"
             }
           }
         ]
@@ -93,7 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "未命名.base",
+                "file": "progress/前端面试.base",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "未命名 的反向链接列表"
+              "title": "前端面试 的反向链接列表"
             }
           },
           {
@@ -112,12 +112,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "未命名.base",
+                "file": "progress/前端面试.base",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "未命名 的出链列表"
+              "title": "前端面试 的出链列表"
             }
           },
           {
@@ -155,13 +155,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "未命名.base",
+                "file": "progress/前端面试.base",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "未命名 的大纲"
+              "title": "前端面试 的大纲"
             }
           }
         ]
@@ -182,8 +182,15 @@
       "bases:新建数据库": false
     }
   },
-  "active": "f11840af5a8a582e",
+  "active": "78e1429e78d8ba70",
   "lastOpenFiles": [
+    "progress/前端面试/0b26a5c2-781c-46de-9388-2eabde9b96e1.md",
+    "前端面试进度.base",
+    "progress/前端面试.base",
+    "progress/前端面试/1d057587-2bc5-415e-b3bc-2235e1296248.md",
+    "progress/前端面试/03ae1546-caa9-46ee-a3e6-d00bcc7584e8.md",
+    "progress/前端面试/05a5ea06-0d40-47a0-a972-498ae14fb8e5.md",
+    "未命名.base",
     "gen_obsidian.py.tmp.93388.06d8e5ac932d",
     "progress/前端面试/fffe29bd-9121-806b-9dc3-c9114e2074fe.md",
     "progress/前端面试/fdfde52b-3571-4069-a601-28e9e12b7a20.md",
@@ -206,13 +213,7 @@
     "progress/前端面试/b96afdf3-c529-482c-9d4c-5c361ac15c4c.md",
     "progress/前端面试/b7f71de0-c008-4b73-9f86-e1d6ab501f57.md",
     "progress/前端面试/b086fe54-10cb-49a6-9311-14e26d7c39bc.md",
-    "progress/前端面试/b0385f20-b572-42d7-b2bc-3d26da515b37.md",
-    "progress/前端面试/a5fdfe80-04fd-4599-9794-2bc4c9c56501.md",
-    "progress/前端面试/a58b1813-25e7-4a22-8ba7-1f92dd88db84.md",
-    "progress/前端面试/a31c2f13-632b-4512-a52b-83211c220a76.md",
     "progress/前端面试",
-    "前端面试进度.base",
-    "未命名.base",
     "obsidian-db/前端面试",
     "obsidian-db",
     "gen_obsidian.py"

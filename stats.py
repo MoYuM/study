@@ -55,12 +55,12 @@ def parse_fm(text):
 
 
 def read_progress(bank):
-    """返回 {id: (掌握, 下次复习)}，读 obsidian-db/<bank>/*.md frontmatter。"""
+    """返回 {id: (掌握, 下次复习)}，读 progress/<bank>/*.md frontmatter。"""
     rows = {}
-    odb_dir = os.path.join(PROGRESS, bank)
-    if not os.path.isdir(odb_dir):
+    prog_dir = os.path.join(PROGRESS, bank)
+    if not os.path.isdir(prog_dir):
         return rows
-    for p in glob.glob(os.path.join(odb_dir, "*.md")):
+    for p in glob.glob(os.path.join(prog_dir, "*.md")):
         fm = parse_fm(open(p, encoding="utf-8").read())
         if not fm.get("id"):
             continue
