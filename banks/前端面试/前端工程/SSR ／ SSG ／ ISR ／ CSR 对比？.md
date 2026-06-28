@@ -4,9 +4,9 @@
 频率: 高频
 id: 385e29bd-9121-8105-854b-f548b4c6e284
 ---
-- CSR：浏览器渲染，首屏白屏、SEO 差。
-- SSR：服务端渲染 HTML，首屏快、利于 SEO，有服务端压力（Next/Nuxt）。
-- SSG：构建时生成静态页，适合内容不常变。
-- ISR：增量静态再生，静态页按需/定时再生，兼顾性能与更新。
+- CSR（Client-Side Rendering）：浏览器渲染，首屏白屏、SEO 差。
+- SSR（Server-Side Rendering）：服务端渲染 HTML，首屏快、利于 SEO，有服务端压力（Next/Nuxt）。
+- SSG（Static Site Generation）：构建时生成静态页，适合内容不常变。
+- ISR（Incremental Static Regeneration）：增量静态再生，静态页按需/定时再生，兼顾性能与更新。
 
 按实时性、SEO、流量与成本选型。
