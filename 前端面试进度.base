@@ -1,34 +1,31 @@
 filters:
   and:
-    - file.inFolder("obsidian-db/前端面试")
-
+    - file.inFolder("progress/前端面试")
 formulas:
-  days_until: 'if(下次复习, (date(下次复习) - today()).days, "")'
-  due_flag: 'if(下次复习, if((date(下次复习) - today()).days <= 0, "⏰到期", ""), if(掌握 == "🆕未评测", "🆕", ""))'
-
+  days_until: if(下次复习, (date(下次复习) - today()).days, "")
+  due_flag: if(下次复习, if((date(下次复习) - today()).days <= 0, "⏰到期", ""), if(掌握 == "🆕未评测", "🆕", ""))
 properties:
   题目:
-    displayName: "题目"
+    displayName: 题目
   分类:
-    displayName: "分类"
+    displayName: 分类
   频率:
-    displayName: "频率"
+    displayName: 频率
   掌握:
-    displayName: "掌握"
+    displayName: 掌握
   下次复习:
-    displayName: "下次复习"
+    displayName: 下次复习
   上次评测:
-    displayName: "上次评测"
+    displayName: 上次评测
   备注:
-    displayName: "备注"
+    displayName: 备注
   formula.days_until:
-    displayName: "距复习(天)"
+    displayName: 距复习(天)
   formula.due_flag:
-    displayName: "状态"
-
+    displayName: 状态
 views:
   - type: table
-    name: "全部题目"
+    name: 全部题目
     order:
       - formula.due_flag
       - 题目
@@ -37,51 +34,47 @@ views:
       - 掌握
       - 下次复习
       - formula.days_until
-
   - type: table
-    name: "待复习（今天到期）"
+    name: 待复习（今天到期）
     filters:
       and:
-        - 'formula.due_flag == "⏰到期"'
+        - formula.due_flag == "⏰到期"
     order:
       - 题目
       - 分类
       - 掌握
       - 下次复习
       - 备注
-
   - type: table
-    name: "未评测"
+    name: 未评测
     filters:
       and:
-        - '掌握 == "🆕未评测"'
+        - 掌握 == "🆕未评测"
     order:
       - 题目
       - 分类
       - 频率
-
   - type: table
-    name: "薄弱题（🔴🟡）"
+    name: 薄弱题（🔴🟡）
     filters:
       or:
-        - '掌握 == "🔴生疏"'
-        - '掌握 == "🟡夹生"'
+        - 掌握 == "🔴生疏"
+        - 掌握 == "🟡夹生"
+    groupBy:
+      property: 掌握
+      direction: ASC
     order:
       - 题目
       - 分类
       - 掌握
       - 下次复习
       - 备注
-    groupBy:
-      property: 掌握
-      direction: ASC
-
   - type: table
-    name: "已掌握（🟢⭐）"
+    name: 已掌握（🟢⭐）
     filters:
       or:
-        - '掌握 == "🟢熟练"'
-        - '掌握 == "⭐已掌握"'
+        - 掌握 == "🟢熟练"
+        - 掌握 == "⭐已掌握"
     order:
       - 题目
       - 分类

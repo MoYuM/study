@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """
-把 banks/ 题库内容 + progress/ 学习进度合并，
-生成 obsidian-db/<题库名>/<id>.md，供 Obsidian Bases 查询。
+把 banks/ 题库内容与 progress/<题库>/ 现有进度合并，确保每道题在
+progress/<题库>/<id>.md 中都有一个条目（供 Obsidian Bases 查询）。
+
+主要用途：新增题目后执行一次，为新题创建 🆕未评测 的进度文件。
+已有进度的题目会保留原有 frontmatter 数据，不会覆盖。
 
 用法：
   python3 gen_obsidian.py [题库名]   # 不传则同步所有题库
 """
-import os, sys, csv, glob, re
+import os, sys, glob
 
-SELF = os.path.dirname(os.path.abspath(__file__))
-BANKS = os.path.join(SELF, "banks")
-PROGRESS = os.path.join(SELF, "progress")
-OUT = os.path.join(SELF, "obsidian-db")
+SELF     = os.path.dirname(os.path.abspath(__file__))
+BANKS    = os.path.join(SELF, "banks")
+OUT      = os.path.join(SELF, "progress")
 
 
 def unquote(v):
@@ -35,14 +37,15 @@ def parse_fm(text):
     return fm
 
 
-def load_progress(tsv_path):
+def load_progress(progress_dir):
+    """返回已有进度 {id: frontmatter_dict}，读 progress/<bank>/*.md。"""
     progress = {}
-    if not os.path.exists(tsv_path):
+    if not os.path.isdir(progress_dir):
         return progress
-    with open(tsv_path, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f, delimiter="\t")
-        for row in reader:
-            progress[row["id"]] = row
+    for p in glob.glob(os.path.join(progress_dir, "*.md")):
+        fm = parse_fm(open(p, encoding="utf-8").read())
+        if fm.get("id"):
+            progress[fm["id"]] = fm
     return progress
 
 
@@ -58,11 +61,10 @@ def yaml_str(v):
 
 def sync_bank(bank_name):
     bank_dir = os.path.join(BANKS, bank_name)
-    tsv_path = os.path.join(PROGRESS, f"{bank_name}.tsv")
-    out_dir = os.path.join(OUT, bank_name)
+    out_dir  = os.path.join(OUT, bank_name)
     os.makedirs(out_dir, exist_ok=True)
 
-    progress = load_progress(tsv_path)
+    progress = load_progress(out_dir)
     md_files = glob.glob(os.path.join(bank_dir, "**", "*.md"), recursive=True)
 
     seen_ids = set()

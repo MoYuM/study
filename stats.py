@@ -10,8 +10,8 @@
 import os, sys, glob, datetime
 from collections import Counter
 
-SELF = os.path.dirname(os.path.abspath(__file__))
-BANKS = os.path.join(SELF, "banks")
+SELF     = os.path.dirname(os.path.abspath(__file__))
+BANKS    = os.path.join(SELF, "banks")
 PROGRESS = os.path.join(SELF, "progress")
 LEVELS = ["🔴生疏", "🟡夹生", "🟢熟练", "⭐已掌握"]
 TODAY = datetime.date.today()
@@ -36,16 +36,38 @@ def is_disabled(path):
     return False
 
 
-def read_progress(path):
-    """返回 {id: (掌握, 下次复习)}。"""
+def parse_fm(text):
+    lines = text.split("\n")
+    if not lines or lines[0].strip() != "---":
+        return {}
+    close = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
+    if close is None:
+        return {}
+    fm = {}
+    for ln in lines[1:close]:
+        if ":" in ln and ln.strip():
+            k, v = ln.split(":", 1)
+            v = v.strip()
+            if len(v) >= 2 and v[0] == '"' and v[-1] == '"':
+                v = v[1:-1].replace('\\"', '"')
+            fm[k.strip()] = v
+    return fm
+
+
+def read_progress(bank):
+    """返回 {id: (掌握, 下次复习)}，读 obsidian-db/<bank>/*.md frontmatter。"""
     rows = {}
-    if not os.path.exists(path):
+    odb_dir = os.path.join(PROGRESS, bank)
+    if not os.path.isdir(odb_dir):
         return rows
-    lines = open(path, encoding="utf-8").read().rstrip("\n").split("\n")
-    for ln in lines[1:]:
-        c = ln.split("\t")
-        if len(c) >= 4 and c[0]:
-            rows[c[0]] = (c[1], c[2])
+    for p in glob.glob(os.path.join(odb_dir, "*.md")):
+        fm = parse_fm(open(p, encoding="utf-8").read())
+        if not fm.get("id"):
+            continue
+        掌握 = fm.get("掌握", "")
+        if not 掌握 or 掌握 == "🆕未评测":
+            continue
+        rows[fm["id"]] = (掌握, fm.get("下次复习", ""))
     return rows
 
 
@@ -85,7 +107,7 @@ def main():
                 cats[os.path.basename(os.path.dirname(md))] += 1
         total = sum(cats.values())
 
-        prog = read_progress(os.path.join(PROGRESS, f"{name}.tsv"))
+        prog = read_progress(name)
         scored = len(prog)
         untested = total - scored
         levels = Counter(lvl for lvl, _ in prog.values())

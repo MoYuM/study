@@ -2,8 +2,9 @@
 """
 快速出题（盖答案选题器）—— 通用多题库版。
 
-把题库内容（banks/）与学习进度（progress/<题库>.tsv）按 id 关联，按 mastery-drill
-的优先级挑题，**只输出题目元信息 + 文件路径，绝不打印答案正文**（盖答案是主动回忆的前提）。
+把题库内容（banks/）与学习进度（obsidian-db/<题库>/<id>.md frontmatter）按 id 关联，
+按 mastery-drill 的优先级挑题，**只输出题目元信息 + 文件路径，绝不打印答案正文**
+（盖答案是主动回忆的前提）。
 
 默认排序优先级（对齐 SKILL.md 第三步）：
   今日到期复习（下次复习≤今天）＞ 从未评测 ＞ 🔴/🟡 低档位 ＞ 高频/重点
@@ -25,10 +26,10 @@
 import os, re, sys, glob, random, json, argparse, datetime
 from collections import Counter
 
-SELF = os.path.dirname(os.path.abspath(__file__))
-BANKS = os.path.join(SELF, "banks")
+SELF     = os.path.dirname(os.path.abspath(__file__))
+BANKS    = os.path.join(SELF, "banks")
 PROGRESS = os.path.join(SELF, "progress")
-TODAY = datetime.date.today()
+TODAY    = datetime.date.today()
 
 LEVELS = ["🔴生疏", "🟡夹生", "🟢熟练", "⭐已掌握"]
 LEVEL_RANK = {lvl: i for i, lvl in enumerate(LEVELS)}          # 🔴=0 … ⭐=3（越小越弱）
@@ -59,16 +60,25 @@ def parse_fm(text):
     return fm
 
 
-def read_progress(path):
-    """返回 {id: {掌握, 下次复习, 上次评测, 备注}}。"""
+def read_progress(bank):
+    """返回 {id: {掌握, 下次复习, 上次评测, 备注}}，读 progress/<bank>/*.md frontmatter。"""
     rows = {}
-    if not os.path.exists(path):
+    odb_dir = os.path.join(PROGRESS, bank)
+    if not os.path.isdir(odb_dir):
         return rows
-    lines = open(path, encoding="utf-8").read().rstrip("\n").split("\n")
-    for ln in lines[1:]:
-        c = ln.split("\t")
-        if len(c) >= 5 and c[0]:
-            rows[c[0]] = {"掌握": c[1], "下次复习": c[2], "上次评测": c[3], "备注": c[4]}
+    for p in glob.glob(os.path.join(odb_dir, "*.md")):
+        fm = parse_fm(open(p, encoding="utf-8").read())
+        if not fm or not fm.get("id"):
+            continue
+        掌握 = fm.get("掌握", "")
+        if not 掌握 or 掌握 == "🆕未评测":
+            continue
+        rows[fm["id"]] = {
+            "掌握":   掌握,
+            "下次复习": fm.get("下次复习", ""),
+            "上次评测": fm.get("上次评测", ""),
+            "备注":   fm.get("备注", ""),
+        }
     return rows
 
 
@@ -87,7 +97,7 @@ def list_banks():
 def load_questions(bank):
     """把一个题库的题目 + 进度组装成候选列表。"""
     bankdir = os.path.join(BANKS, bank)
-    prog = read_progress(os.path.join(PROGRESS, f"{bank}.tsv"))
+    prog = read_progress(bank)
     out = []
     for p in glob.glob(os.path.join(bankdir, "*", "*.md")):
         fm = parse_fm(open(p, encoding="utf-8").read())
@@ -206,7 +216,7 @@ def print_human(picked, bank, total_pool, args):
             print(f"   上次备注  {q['备注']}")
         print()
     print("揭晓答案时读上面的 file 正文；评完把结果写回 "
-          f"progress/{bank}.tsv 里对应 id 的行。\n")
+          f"progress/{bank}/<id>.md 的 frontmatter。\n")
 
 
 def describe_filters(args):
