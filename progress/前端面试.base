@@ -2,8 +2,8 @@ filters:
   and:
     - file.inFolder("progress/前端面试")
 formulas:
-  days_until: 'if(下次复习, (date(下次复习) - today()).days, "")'
-  due_flag: 'if(下次复习, if((date(下次复习) - today()).days <= 0, "⏰到期", ""), if(掌握 == "🆕未评测", "🆕", ""))'
+  days_until: if(下次复习, (date(下次复习) - today()).days, "")
+  due_flag: if(下次复习, if((date(下次复习) - today()).days <= 0, "⏰到期", ""), if(掌握 == "🆕未评测", "🆕", ""))
 properties:
   题目:
     displayName: 题目
@@ -34,6 +34,10 @@ views:
       - 掌握
       - 下次复习
       - formula.days_until
+      - 备注
+      - file.backlinks
+      - file.basename
+      - file.embeds
   - type: table
     name: 待复习（今天到期）
     filters:

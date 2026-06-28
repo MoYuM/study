@@ -11,13 +11,14 @@
             "id": "78e1429e78d8ba70",
             "type": "leaf",
             "state": {
-              "type": "bases",
+              "type": "markdown",
               "state": {
-                "file": "progress/前端面试.base",
-                "viewName": "全部题目"
+                "file": "CLAUDE.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-table",
-              "title": "前端面试"
+              "icon": "lucide-file",
+              "title": "CLAUDE"
             }
           }
         ]
@@ -93,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "progress/前端面试.base",
+                "file": "CLAUDE.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "前端面试 的反向链接列表"
+              "title": "CLAUDE 的反向链接列表"
             }
           },
           {
@@ -112,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "progress/前端面试.base",
+                "file": "CLAUDE.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "前端面试 的出链列表"
+              "title": "CLAUDE 的出链列表"
             }
           },
           {
@@ -155,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "progress/前端面试.base",
+                "file": "CLAUDE.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "前端面试 的大纲"
+              "title": "CLAUDE 的大纲"
             }
           }
         ]
@@ -184,12 +185,20 @@
   },
   "active": "78e1429e78d8ba70",
   "lastOpenFiles": [
+    "README.md",
+    "CLAUDE.md",
+    "progress/前端面试.base",
+    "progress/前端面试/8d3925dd-3992-456b-8326-dd9c34ac3a1f.md",
+    "progress/前端面试/8fd622d0-f9f8-4cda-80b2-700956809f47.md",
+    "progress/前端面试/8cdafe1c-4ce9-494b-bc25-0028cb48a721.md",
+    "progress/前端面试/8ae79395-0cbd-468f-93e0-d3d4fc0926c9.md",
+    "progress/前端面试/5d2de91f-eea9-46d3-8213-e2e4e41a5021.md",
+    "progress/前端面试/05a5ea06-0d40-47a0-a972-498ae14fb8e5.md",
+    "progress/前端面试/2b89d23f-3806-42ca-b96f-ad55b6369bdd.md",
     "progress/前端面试/0b26a5c2-781c-46de-9388-2eabde9b96e1.md",
     "前端面试进度.base",
-    "progress/前端面试.base",
     "progress/前端面试/1d057587-2bc5-415e-b3bc-2235e1296248.md",
     "progress/前端面试/03ae1546-caa9-46ee-a3e6-d00bcc7584e8.md",
-    "progress/前端面试/05a5ea06-0d40-47a0-a972-498ae14fb8e5.md",
     "未命名.base",
     "gen_obsidian.py.tmp.93388.06d8e5ac932d",
     "progress/前端面试/fffe29bd-9121-806b-9dc3-c9114e2074fe.md",
@@ -206,13 +215,6 @@
     "progress/前端面试/df62c498-a565-4ba2-bf8e-fcecdafbe04e.md",
     "progress/前端面试/d23b7ecc-89b6-4e49-9a86-4559697f7c6e.md",
     "progress/前端面试/ce0a256b-e888-4305-8661-a17ac2178120.md",
-    "progress/前端面试/bbeba626-bac2-4cbc-b387-7cff2ddbd026.md",
-    "progress/前端面试/cc788a3a-033d-4c33-8eca-5c94882331bf.md",
-    "progress/前端面试/c5062df9-be09-4f46-8d77-6233168e6c08.md",
-    "progress/前端面试/bae91a51-4d49-4d1e-b54b-f70084ccbecb.md",
-    "progress/前端面试/b96afdf3-c529-482c-9d4c-5c361ac15c4c.md",
-    "progress/前端面试/b7f71de0-c008-4b73-9f86-e1d6ab501f57.md",
-    "progress/前端面试/b086fe54-10cb-49a6-9311-14e26d7c39bc.md",
     "progress/前端面试",
     "obsidian-db/前端面试",
     "obsidian-db",
