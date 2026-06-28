@@ -93,6 +93,8 @@ def load_questions(bank):
         fm = parse_fm(open(p, encoding="utf-8").read())
         if fm is None or not fm.get("id"):
             continue
+        if fm.get("禁用", "").lower() in ("true", "是", "yes"):
+            continue
         pr = prog.get(fm["id"])
         nxt = parse_date(pr["下次复习"]) if pr else None
         out.append({

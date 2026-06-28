@@ -3,6 +3,7 @@
 分类: Vue
 频率: 低频
 id: 385e29bd-9121-81a3-82c3-fb1d17136f0c
+禁用: true
 ---
 8 个阶段：beforeCreate / created / beforeMount / mounted / beforeUpdate / updated / beforeUnmount / unmounted（Vue3 组合式为 onMounted 等）。
 

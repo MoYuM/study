@@ -17,6 +17,25 @@ LEVELS = ["🔴生疏", "🟡夹生", "🟢熟练", "⭐已掌握"]
 TODAY = datetime.date.today()
 
 
+def is_disabled(path):
+    """快速检查 .md 文件是否有 禁用: true。"""
+    try:
+        lines = open(path, encoding="utf-8").read().split("\n")
+        if not lines or lines[0].strip() != "---":
+            return False
+        close = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
+        if close is None:
+            return False
+        for ln in lines[1:close]:
+            if ":" in ln:
+                k, v = ln.split(":", 1)
+                if k.strip() == "禁用" and v.strip().lower() in ("true", "是", "yes"):
+                    return True
+    except Exception:
+        pass
+    return False
+
+
 def read_progress(path):
     """返回 {id: (掌握, 下次复习)}。"""
     rows = {}
@@ -62,7 +81,8 @@ def main():
         name = os.path.basename(bd)
         cats = Counter()
         for md in glob.glob(os.path.join(bd, "*", "*.md")):
-            cats[os.path.basename(os.path.dirname(md))] += 1
+            if not is_disabled(md):
+                cats[os.path.basename(os.path.dirname(md))] += 1
         total = sum(cats.values())
 
         prog = read_progress(os.path.join(PROGRESS, f"{name}.tsv"))

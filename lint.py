@@ -19,6 +19,7 @@ PROGRESS = os.path.join(SELF, "progress")
 
 CORE = ["题目", "分类", "id"]
 PROGRESS_FIELDS = {"掌握", "下次复习", "上次评测", "备注"}
+SYSTEM_FIELDS = {"禁用"}  # 系统级字段，无需在 meta.yml 声明
 LEVELS = {"🔴生疏", "🟡夹生", "🟢熟练", "⭐已掌握"}
 UUID_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -98,7 +99,7 @@ def lint_bank(bankdir):
         for k in fm:
             if k in PROGRESS_FIELDS:
                 err(f"{rel(p)}: 题库里不得出现进度字段 `{k}`（应放 progress/{name}.tsv）")
-            elif k not in allowed:
+            elif k not in allowed and k not in SYSTEM_FIELDS:
                 warn(f"{rel(p)}: 未知字段 `{k}`（meta 未声明）")
         cat = fm.get("分类", "")
         if cat and cat not in meta["分类"]:

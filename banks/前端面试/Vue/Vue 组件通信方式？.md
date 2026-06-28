@@ -3,6 +3,7 @@
 分类: Vue
 频率: 高频
 id: 385e29bd-9121-817e-96b2-c4ec08117b74
+禁用: true
 ---
 - 父子：props 下发、`$emit` 上传（v-model）。
 - 跨级：provide / inject。
