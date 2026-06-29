@@ -1,6 +1,10 @@
 
 本项目为基于 /mastery-drill skill 的学习系统，根据用户需要，自动调用 skill 触发。
 
+# 规则
+
+- **禁止新建 branch 或 worktree**，所有操作直接在 master 上进行。
+
 # 题库
 
 - 题库目录为 `banks/<题库>/<分类>/<题目>.md`
