@@ -85,3 +85,20 @@ views:
       - 掌握
       - 上次评测
       - 备注
+  - type: table
+    name: 每日进度
+    groupBy:
+      property: 上次评测
+      direction: DESC
+    order:
+      - 题目
+      - 掌握
+      - 备注
+    sort:
+      - property: 备注
+        direction: ASC
+      - property: file.mtime
+        direction: DESC
+    cardSize: 250
+    imageAspectRatio: 1.1
+    rowHeight: medium

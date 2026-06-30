@@ -11,14 +11,13 @@
             "id": "78e1429e78d8ba70",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "bases",
               "state": {
-                "file": "CLAUDE.md",
-                "mode": "source",
-                "source": false
+                "file": "progress/前端面试.base",
+                "viewName": "每日进度"
               },
-              "icon": "lucide-file",
-              "title": "CLAUDE"
+              "icon": "lucide-table",
+              "title": "前端面试"
             }
           }
         ]
@@ -53,7 +52,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "AI 前端如何实现大模型对话的流式输出",
+                "query": "webpack",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -78,7 +77,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 227.5
+    "width": 466.5
   },
   "right": {
     "id": "5fbf99799d5ea2fd",
@@ -94,7 +93,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CLAUDE.md",
+                "file": "progress/前端面试.base",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +103,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "CLAUDE 的反向链接列表"
+              "title": "前端面试 的反向链接列表"
             }
           },
           {
@@ -113,12 +112,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CLAUDE.md",
+                "file": "progress/前端面试.base",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "CLAUDE 的出链列表"
+              "title": "前端面试 的出链列表"
             }
           },
           {
@@ -156,13 +155,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CLAUDE.md",
+                "file": "progress/前端面试.base",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "CLAUDE 的大纲"
+              "title": "前端面试 的大纲"
             }
           }
         ]
@@ -185,9 +184,18 @@
   },
   "active": "78e1429e78d8ba70",
   "lastOpenFiles": [
-    "README.md",
-    "CLAUDE.md",
+    "progress/前端面试/0b26a5c2-781c-46de-9388-2eabde9b96e1.md",
     "progress/前端面试.base",
+    "banks/前端面试/HTTP/HTTP／1.1、HTTP／2、HTTP／3 演进与 QUIC？.md",
+    "banks/前端面试/JS/async／await 原理与异常捕获？.md",
+    "banks/前端面试/前端工程/SSR ／ SSG ／ ISR ／ CSR 对比？.md",
+    "banks/前端面试/AI/Prompt Injection 如何防范？.md",
+    "banks/前端面试/前端工程/Webpack.md",
+    "banks/前端面试/前端工程/Webpack loader 和 plugin 开发上的区别？.md",
+    "banks/前端面试/AI/Hybrid Search ／ Query Rewrite ／ Rerank 各解决什么？.md",
+    "banks/前端面试/AI/RAG 的向量索引（Flat／HNSW／IVF）怎么选？.md",
+    "CLAUDE.md",
+    "README.md",
     "progress/前端面试/8d3925dd-3992-456b-8326-dd9c34ac3a1f.md",
     "progress/前端面试/8fd622d0-f9f8-4cda-80b2-700956809f47.md",
     "progress/前端面试/8cdafe1c-4ce9-494b-bc25-0028cb48a721.md",
@@ -195,7 +203,6 @@
     "progress/前端面试/5d2de91f-eea9-46d3-8213-e2e4e41a5021.md",
     "progress/前端面试/05a5ea06-0d40-47a0-a972-498ae14fb8e5.md",
     "progress/前端面试/2b89d23f-3806-42ca-b96f-ad55b6369bdd.md",
-    "progress/前端面试/0b26a5c2-781c-46de-9388-2eabde9b96e1.md",
     "前端面试进度.base",
     "progress/前端面试/1d057587-2bc5-415e-b3bc-2235e1296248.md",
     "progress/前端面试/03ae1546-caa9-46ee-a3e6-d00bcc7584e8.md",
@@ -206,15 +213,6 @@
     "progress/前端面试/fc70bb8e-fa0e-498b-a2ac-5be751f07f24.md",
     "progress/前端面试/fa9e9778-3776-4490-89a1-ac9d0adce7e4.md",
     "progress/前端面试/f7b79b6c-7a75-4b16-a6a0-2f2ddbc868d1.md",
-    "progress/前端面试/f6dfad31-f2c4-4e41-8502-71a1ec2a1dde.md",
-    "progress/前端面试/f3ca7a81-67e0-48b4-97c1-8b17f016ef3a.md",
-    "progress/前端面试/e8199c1e-82dd-4f46-b8ec-7216226bbb31.md",
-    "progress/前端面试/e7203de4-05fa-4573-b798-7af1d17be2a1.md",
-    "progress/前端面试/e4c38e48-78b5-4c15-b0ba-1e2991eb3c83.md",
-    "progress/前端面试/e1d2de9e-a70b-4aa1-84d8-54964522f491.md",
-    "progress/前端面试/df62c498-a565-4ba2-bf8e-fcecdafbe04e.md",
-    "progress/前端面试/d23b7ecc-89b6-4e49-9a86-4559697f7c6e.md",
-    "progress/前端面试/ce0a256b-e888-4305-8661-a17ac2178120.md",
     "progress/前端面试",
     "obsidian-db/前端面试",
     "obsidian-db",

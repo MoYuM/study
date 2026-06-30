@@ -1,5 +1,5 @@
 ---
-题目: "SSR / SSG / ISR / CSR 对比？"
+题目: SSR / SSG / ISR / CSR 对比？
 分类: 前端工程
 频率: 高频
 id: 385e29bd-9121-8105-854b-f548b4c6e284
