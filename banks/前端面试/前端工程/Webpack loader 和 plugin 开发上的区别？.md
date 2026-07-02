@@ -32,3 +32,12 @@ use: ['style-loader', 'css-loader', 'sass-loader']
 ```
 
 顺序写反会导致编译报错或输出错误，是常见踩坑点。
+
+## plugin 补充细节
+
+- plugin 本质是一个实现了 `apply(compiler)` 方法的 class；`apply` 只在 Webpack **启动时调用一次**（不是每个钩子都调一次），内部通过 `compiler.hooks.xxx.tap/tapAsync` 主动注册回调订阅生命周期钩子，底层依赖 **Tapable**。
+- `compiler`（全局只有一个，代表整个 Webpack 环境配置）vs `compilation`（每次构建都会新建一个，代表一次具体的编译过程）。
+- 常见插件：`HtmlWebpackPlugin`（自动生成 HTML 并注入 bundle）、`MiniCssExtractPlugin`（把 CSS 从 JS 里抽出来单独文件）、`DefinePlugin`（编译时注入全局常量）、`CleanWebpackPlugin`（构建前清空 dist）。
+
+## 参考资料
+- [plugin](https://www.webpackjs.com/concepts/plugins/)
