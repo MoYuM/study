@@ -13,7 +13,8 @@ https://tech.meituan.com/2018/10/11/fe-security-csrf.html
     - POST
     - 链接
 - 预防？
-    - 同源检测
+    - 同源检测（校验 Origin/Referer）
     - 双重 cookie
     - CSRF Token
     - Samesite Cookie
+    - 关键操作二次验证

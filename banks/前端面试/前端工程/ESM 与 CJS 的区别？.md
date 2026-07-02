@@ -4,7 +4,7 @@
 频率: 高频
 id: 385e29bd-9121-811d-9c80-c49637809bd3
 ---
-- ESM：静态导入（编译时确定依赖）、支持 Tree-shaking、可异步加载、import/export，是值引用（活绑定）。
+- ESM：静态导入（编译时确定依赖）、支持 Tree-shaking、可异步加载、import/export，是值引用（活绑定）、不存在循环引用问题（CJS 循环引用时可能拿到未执行完的模块导出的不完整对象）。
 - CJS：运行时同步加载、require/module.exports、动态、不易 Tree-shaking，是值拷贝。
 
 ## 活绑定 vs 拷贝
