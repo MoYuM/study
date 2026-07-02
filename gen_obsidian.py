@@ -84,6 +84,8 @@ properties:
     displayName: 上次评测
   备注:
     displayName: 备注
+  题库来源:
+    displayName: 题库来源
   formula.days_until:
     displayName: 距复习(天)
   formula.due_flag:
@@ -99,6 +101,7 @@ views:
       - 掌握
       - 下次复习
       - formula.days_until
+      - 题库来源
   - type: table
     name: 待复习（今天到期）
     filters:
@@ -182,12 +185,14 @@ def sync_bank(bank_name):
         上次评测 = p.get("上次评测", "")
         备注 = p.get("备注", "")
 
+        bank_link = f"[[{md_path.replace(SELF + os.sep, '')}]]"
         lines = [
             "---",
             f"题目: {yaml_str(fm.get('题目', ''))}",
             f"分类: {yaml_str(fm.get('分类', ''))}",
             f"频率: {yaml_str(fm.get('频率', ''))}",
             f"id: {qid}",
+            f"题库来源: {yaml_str(bank_link)}",
             f"掌握: {yaml_str(掌握)}",
         ]
         if 下次复习:
@@ -198,7 +203,6 @@ def sync_bank(bank_name):
             lines.append(f"备注: {yaml_str(备注)}")
         lines.append("---")
         lines.append("")
-        lines.append(f"题库来源: [[{md_path.replace(SELF + os.sep, '')}]]")
 
         out_path = os.path.join(out_dir, f"{qid}.md")
         open(out_path, "w", encoding="utf-8").write("\n".join(lines))

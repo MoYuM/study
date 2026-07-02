@@ -19,6 +19,8 @@ properties:
     displayName: 上次评测
   备注:
     displayName: 备注
+  题库来源:
+    displayName: 题库来源
   formula.days_until:
     displayName: 距复习(天)
   formula.due_flag:
@@ -35,6 +37,7 @@ views:
       - 下次复习
       - formula.days_until
       - 备注
+      - 题库来源
       - file.backlinks
       - file.basename
       - file.embeds
