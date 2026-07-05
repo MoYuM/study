@@ -54,15 +54,17 @@ def parse_fm(text):
     return fm
 
 
-def read_progress(bank):
-    """返回 {id: (掌握, 下次复习)}，读 progress/<bank>/*.md frontmatter。"""
+def read_progress(bank, active_ids):
+    """返回 {id: (掌握, 下次复习)}，读 progress/<bank>/*.md frontmatter。
+    只统计仍对应「未禁用」题库题目的记录，避免题目被禁用后进度残留造成计数偏差。
+    """
     rows = {}
     prog_dir = os.path.join(PROGRESS, bank)
     if not os.path.isdir(prog_dir):
         return rows
     for p in glob.glob(os.path.join(prog_dir, "*.md")):
         fm = parse_fm(open(p, encoding="utf-8").read())
-        if not fm.get("id"):
+        if not fm.get("id") or fm["id"] not in active_ids:
             continue
         掌握 = fm.get("掌握", "")
         if not 掌握 or 掌握 == "🆕未评测":
@@ -102,12 +104,16 @@ def main():
     for bd in bank_dirs:
         name = os.path.basename(bd)
         cats = Counter()
+        active_ids = set()
         for md in glob.glob(os.path.join(bd, "*", "*.md")):
             if not is_disabled(md):
                 cats[os.path.basename(os.path.dirname(md))] += 1
+                fm = parse_fm(open(md, encoding="utf-8").read())
+                if fm.get("id"):
+                    active_ids.add(fm["id"])
         total = sum(cats.values())
 
-        prog = read_progress(name)
+        prog = read_progress(name, active_ids)
         scored = len(prog)
         untested = total - scored
         levels = Counter(lvl for lvl, _ in prog.values())
