@@ -23,6 +23,17 @@ Fiber 解决同步递归更新大组件树时阻塞主线程导致的卡顿。
 需要一套自己完全可控的调度机制，不依赖浏览器"自己判断空闲"。
 
 **✅ Scheduler + MessageChannel：React 自己实现了一套基于 MessageChannel 的时间切片机制——`postMessage` 触发的回调是宏任务，比 `setTimeout(0)` 更快更可控（不受 HTML 规范里嵌套定时器 4ms 最小延迟的限制），每个时间片约 5ms，到点就检查 `shouldYield()` 让出主线程**
+
+```js
+const channel = new MessageChannel();
+channel.port1.onmessage = performWorkUntilDeadline; // 真正干活的函数
+function schedulePerformWorkUntilDeadline() {
+  channel.port2.postMessage(null); // 不是同步调用，是"排队"
+}
+```
+
+**为什么 `postMessage` 能实现"让出"**：HTML 规范把它定义成"把一个任务塞进 `port1` 专属的任务队列（port message queue）"，这个队列是事件循环的众多任务源之一——不是同步调用，也不是排进微任务队列（微任务在当前任务结束后立刻原地清空，根本不会给浏览器渲染的机会）。`performWorkUntilDeadline` 必须等当前这轮 JS 执行栈跑完、微任务清空、事件循环转回主循环、再轮到这个任务队列，才会被调用——这段"退出当前宏任务、等待下一个宏任务被取出"的间隙，正是浏览器唯一能插进来渲染/处理点击输入的窗口。`postMessage` 传的 `null` 本身没有任何意义，React 要的只是"排队进宏任务"这个副作用。
+
 调度机制解决了"什么时候暂停"，但多个更新任务同时存在时，还缺一个"谁先谁后"的优先级模型。
 
 **❓ React 16.1（2017 年 11 月）引入的 `expirationTime` 模型，用数字时间戳表示优先级（越紧急数值越小、越早处理），这套模型在后续需要支持"多个并行的 Suspense transition 同时存在"的场景下，灵活性不够**
@@ -42,3 +53,5 @@ Fiber 解决同步递归更新大组件树时阻塞主线程导致的卡顿。
 - [PR #18796 — Initial Lanes implementation](https://github.com/facebook/react/pull/18796)
 - [React v18.0 — React Blog（2022-03-29）](https://react.dev/blog/2022/03/29/react-v18)
 - [acdlite/react-fiber-architecture](https://github.com/acdlite/react-fiber-architecture)
+- [WHATWG HTML Standard — 9.3 Cross-document messaging（port message queue 定义）](https://html.spec.whatwg.org/multipage/web-messaging.html)
+- [MDN — MessagePort.postMessage()](https://developer.mozilla.org/en-US/docs/Web/API/MessagePort/postMessage)
