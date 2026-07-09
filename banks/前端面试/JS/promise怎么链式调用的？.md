@@ -12,6 +12,24 @@ then 每次返回一个新的 Promise，从而支持链式调用。
 
 链式把嵌套回调扁平化，解决回调地狱；注意每个 then 都应 return 以保持链路。
 
+## 追问
+
+### then 返回的新 Promise，状态具体是怎么决定的？
+
+由 `.then()` 里回调函数的**返回值**决定，规则（Promises/A+ 规范里叫「thenable 解析过程」，`[[Resolve]](promise, x)` 算法）分三种情况：
+
+1. 回调返回一个**普通值**（数字、字符串、普通对象等）→ 新 Promise 直接以这个值 **fulfilled**。
+2. 回调返回一个 **Promise（或 thenable，即带 `.then` 方法的对象）**→ 新 Promise **不会立刻决议**，而是"跟随"这个返回的 Promise——等它 resolve/reject 后，新 Promise 才跟着变成相同的状态和值。
+3. 回调内部**抛出异常**（或返回 `Promise.reject(...)`）→ 新 Promise 直接以这个错误 **rejected**。
+
+```js
+Promise.resolve(1)
+  .then(v => v + 1)                 // 返回普通值 2 → 新 promise 直接 fulfilled(2)
+  .then(v => fetch('/api/' + v))    // 返回一个新 Promise → 新 promise 跟随 fetch 的结果
+  .then(res => { throw new Error('x') }) // 抛出异常 → 新 promise 直接 rejected
+  .catch(err => console.log(err));  // 捕获最近的错误
+```
+
 ## 发展史（问题 → 方案的链条）
 
 **❓ 早期 JS 异步全靠回调，回调地狱难维护，也没有统一的错误传播/链式组织方式**
