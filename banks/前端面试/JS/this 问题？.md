@@ -4,64 +4,47 @@
 频率: 低频
 id: 73851fc5-cdba-4045-aafa-3a7078400800
 ---
-this 取决于函数的调用方式：
+this 的值取决于它出现的**上下文**：函数、类、全局——这是 MDN 的原始分类方式，比"五种绑定规则"更完整（五规则是业界流行的教学简化框架，源自 Kyle Simpson《You Don't Know JS》，方便记但只覆盖了"函数上下文"这一支）。
 
-1. 默认绑定：独立调用，非严格模式指向全局对象，严格模式为 undefined。
-2. 隐式绑定：`obj.fn()`，this 指向 obj。
-3. 显式绑定：`call` / `apply` / `bind` 指定 this。
-4. new 绑定：构造函数中 this 指向新建实例。
-5. 箭头函数：没有自己的 this，继承外层词法作用域的 this，且无法被 call/bind 改变。
+## 函数上下文（this 是调用时才确定的隐藏参数）
 
-优先级：new > 显式绑定 > 隐式绑定 > 默认绑定。
+- **隐式绑定**：`obj.fn()` 调用形式，this 指向 obj。
+- **this 替换**（非严格模式专属）：调用时 this 会是 `undefined`/`null` → 替换成 `globalThis`；会是原始值（数字/字符串/布尔值）→ 替换成对应包装对象（`Number`/`String`/`Boolean` 实例）。严格模式下不替换，直接是 `undefined`。
+- **回调函数**：this 由 API 实现者决定——默认以 `undefined` 调用（非严格模式下即变 `globalThis`，如 `[1,2,3].forEach(fn)`）；部分 API 提供 `thisArg` 参数（`forEach` 第二参数）；少数 API 主动设置 this（`JSON.parse` 的 reviver）。
+- **显式绑定**：`call`/`apply`/`bind` 手动指定 this；`bind` 返回的新函数 this 永久锁定，唯一能突破的是用 `new` 调用它（见「Bind\Call\Apply 的优先级和原因」）。
+- **箭头函数**：没有自己的 this 绑定机制，词法继承外层作用域的 this，`call`/`apply`/`bind` 传的 thisArg 对它无效。
+- **构造函数（new）**：this 绑定到新创建的实例；但若构造函数显式 `return` 了另一个非原始值，这个新实例会被丢弃，this 的值不再是 new 表达式的结果。
+- **`super.method()`**：method 内部的 this 与外围调用处的 this 相同，不等于 `super` 指向的父类原型对象——特殊语法，不能按"看点前面是谁"的直觉去推。
 
-## 追问
+**这几种绑定规则之间的优先级**（只在函数被显式调用时才谈得上排序，不含全局/类上下文）：`new > 显式绑定 > 隐式绑定 > 默认绑定（含 this 替换）`；箭头函数完全不参与这个优先级仲裁。
 
-### 独立调用一个普通函数（不在任何对象上调用），this 到底是什么？
+## 类上下文（先分「静态 / 实例」两个子上下文）
 
-**非严格模式**下指向全局对象（浏览器里是 `window`）；**严格模式**下是 `undefined`——这是常被漏掉的一半：不加限定说"独立调用 this 指向全局"只对了一半，严格模式（包括 ES Module、class 内部默认严格模式）下会直接是 `undefined`，访问 `this.xxx` 会抛 `TypeError`。
+- **实例上下文**（constructor / 方法 / 实例字段初始化器）：this = 类的实例。
+- **静态上下文**（static 方法 / 静态字段 / 静态初始化块）：this = 类本身。
+- **派生类（extends）构造函数**：没有初始 this 绑定，`super()` 之前访问 this 直接报错（TDZ，和 let/const 那道题是同一套机制的复用），`super()` 执行的效果约等于 `this = new Base()`。
 
-### 箭头函数为什么"无法被 call/bind 改变"？跟前面四种绑定规则是什么关系？
-
-因为箭头函数**根本没有自己的 this 绑定这个内部机制**——普通函数在被调用时，引擎会为这次调用单独确定一份 this（走默认/隐式/显式/new 这四种规则之一，取决于怎么调用它）；箭头函数则完全没有这个"每次调用重新确定 this"的步骤，它的 this 在定义时就直接沿用外层作用域的 this 并永久固定。`call`/`apply`/`bind` 传入的 thisArg 对箭头函数是无效的——不是"被忽略"，而是箭头函数压根没有可供这几个方法操作的 this 槽位。所以箭头函数不参与前面四种规则的优先级仲裁，它是跳出这套体系之外的第五种情况。
-
-### 补充：以上"五种规则+优先级"是简化框架，MDN 真实是怎么分类的？
-
-"五种规则+优先级"是业界流行的教学简化框架（源自 Kyle Simpson《You Don't Know JS》），方便记但不是 MDN/规范的原始分类。MDN 按「函数上下文 / 类上下文 / 全局上下文」组织，大部分场景（DOM 事件监听器里 this 绑定到元素、getter/setter 里 this 绑定到"正在访问属性的对象"）本质还是隐式绑定的变体，但有几个框架完全没覆盖到的独立机制：
-
-### 非严格模式下，如果调用时 this 会是 undefined/null 或一个原始值，实际发生什么？
-
-"默认绑定：非严格模式指向全局对象"这句话简化了一层，真实机制叫「this 替换」——非严格模式下函数体内的 this 必须是一个对象：
-- 调用时 this 会是 `undefined`/`null` → 替换成 `globalThis`。
-- 调用时 this 会是一个**原始值**（数字/字符串/布尔值）→ 替换成对应的包装对象（`Number`/`String`/`Boolean` 实例）。
-
-```js
-function bar() { console.log(Object.prototype.toString.call(this)); }
-bar.call(7);      // [object Number]，不是原始值 7 本身
-bar.call("foo");  // [object String]
-```
-
-### 全局作用域顶层的 this 是什么？
-
-这不是"函数怎么被调用"能解释的——**全局上下文的 this 取决于代码跑在什么容器里**，是和前面四种规则完全独立的一层：
+## 全局上下文（不是"调用方式"决定的，是"代码跑在哪个容器里"决定的）
 
 | 运行环境 | 顶层 this |
 |---|---|
-| 普通 `<script>` 脚本（不管严格/非严格模式） | `globalThis`（浏览器里是 `window`） |
-| ES Module（`<script type="module">`） | `undefined` |
+| 普通 `<script>` 脚本（不管严格/非严格模式） | `globalThis` |
+| ES Module（`type="module"`） | `undefined` |
 | Node.js CommonJS 模块 | `module.exports`（不是全局对象） |
+| `eval` 执行 | 直接调用跟外层 this 相同；间接调用等于 `globalThis` |
 
-容易踩的坑：普通脚本顶层加了 `'use strict'` 之后 this **依然是** `globalThis`，不会变成 `undefined`——顶层 this 绑定和"函数内部默认绑定受严格模式影响"是两条独立的规则。
+对象字面量本身不开 this 作用域，只有函数（方法）才会——对象字面量里裸写的 this 继承自外围作用域。容易踩的坑：普通脚本顶层加了 `'use strict'` 之后 this **依然是** `globalThis`，不会变成 `undefined`——顶层 this 绑定和"函数内部默认绑定受严格模式影响"是两条独立的规则。
 
-### 用 extends 继承出来的子类（派生类），constructor 里的 this 什么时候才能用？
+## 两个常被漏记的"寄生"情况（本质是函数上下文里"回调"的变体）
 
-必须先调用 `super()`，之前访问 this 会直接报错——这是 let/const 那道题学过的 **TDZ 机制在 this 绑定上的又一次复用**。基类构造函数一调用 this 就绑定好了，但派生类构造函数没有初始的 this 绑定，`super()` 执行的效果大致相当于 `this = new Base()`：
+- **getter/setter**：this 绑定到"正在访问属性的那个对象"，不是定义这个属性的对象。
+- **DOM 事件监听器**（`addEventListener`）/ 内联 `onclick`：this 绑定到监听器所在的 DOM 元素。
 
-```js
-class Bad extends Base {
-  constructor() {} // 忘了调用 super()
-}
-new Bad(); // ReferenceError: Must call super constructor in derived class before accessing 'this'...
-```
+## 追问
+
+### 箭头函数为什么"无法被 call/bind 改变"？
+
+因为箭头函数根本没有自己的 this 绑定这个内部机制——普通函数在被调用时，引擎会为这次调用单独确定一份 this（走上面函数上下文里的某条规则）；箭头函数完全没有这个"每次调用重新确定 this"的步骤，它的 this 在**定义时**就直接沿用外层作用域的 this 并永久固定。`call`/`apply`/`bind` 传入的 thisArg 对箭头函数无效——不是"被忽略"，而是箭头函数压根没有可供这几个方法操作的 this 槽位。
 
 ## 发展史（问题 → 方案的链条）
 
