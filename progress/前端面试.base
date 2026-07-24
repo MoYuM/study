@@ -19,6 +19,8 @@ properties:
     displayName: 上次评测
   备注:
     displayName: 备注
+  禁用:
+    displayName: 禁用
   题库来源:
     displayName: 题库来源
   formula.days_until:
@@ -46,6 +48,7 @@ views:
     filters:
       and:
         - formula.due_flag == "⏰到期"
+        - 禁用 != true
     order:
       - 题目
       - 分类
@@ -57,6 +60,7 @@ views:
     filters:
       and:
         - 掌握 == "🆕未评测"
+        - 禁用 != true
     order:
       - 题目
       - 分类
@@ -64,9 +68,11 @@ views:
   - type: table
     name: 薄弱题（🔴🟡）
     filters:
-      or:
-        - 掌握 == "🔴生疏"
-        - 掌握 == "🟡夹生"
+      and:
+        - 禁用 != true
+        - or:
+            - 掌握 == "🔴生疏"
+            - 掌握 == "🟡夹生"
     groupBy:
       property: 掌握
       direction: ASC
