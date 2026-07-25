@@ -25,7 +25,7 @@
 - 最后一步是"现状"，把易混淆的两个点摆在一起对比收尾
 - 单独成一节（`## 发展史（问题 → 方案的链条）`），不要和追问/苏格拉底式提问揉在一起
 - 不是万能的：纯算法/数据结构题（如「有效括号」「列表转树」）没有设计演化史可讲，不要硬套，用别的方式加强记忆
-- 已用此方法改写的例子：`banks/前端面试/JS/原型链是什么？顶层是什么？.md`、`banks/前端面试/AI/Transformer 原理简述？.md`、`banks/前端面试/AI/什么是 Agent Loop ／ ReAct？.md`、`banks/前端面试/AI/Hybrid Search ／ Query Rewrite ／ Rerank 各解决什么？.md`
+- 已用此方法改写的例子：`banks/前端面试/JS/原型链是什么？顶层是什么？.md`、`banks/前端面试/AI/Transformer 原理简述？.md`、`banks/前端面试/AI/什么是 Agent Loop ／ ReAct？.md`、`banks/前端面试/AI/Hybrid Search ／ Query Rewrite ／ Rerank 各解决什么？.md`、`banks/前端面试/JS/Promise.all ／ allSettled ／ race ／ any 的区别？.md`
 
 # 进度跟踪
 
