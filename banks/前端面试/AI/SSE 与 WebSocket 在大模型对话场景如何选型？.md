@@ -32,11 +32,21 @@ HTTP/2 允许在一条连接上并行传输多个流，不再受"每域名 6 个
 **✅ fetch + ReadableStream：手动读取流式响应，绕开 `EventSource` 的限制**
 用 `fetch` 发起 POST 请求，从响应体的 `ReadableStream` 里逐块读取数据，效果上等价于"单向流式推送"，但不受 `EventSource` 只能 GET 的限制，也不用严格遵守 SSE 的 `data:` 格式——这也是当前大模型 API（如 OpenAI/Anthropic 的流式接口）常用的实现方式。
 
-**现状：大模型对话首选 SSE/流式 fetch，双向实时场景才用 WebSocket**
-纯粹的服务端流式输出（如大模型逐字生成）用 SSE 或 fetch+ReadableStream 就够，轻量、兼容 HTTP 基础设施；协同编辑、语音信令这类真正需要双向实时通信的场景，才需要 WebSocket 的全双工能力。
+**❓ 2023 年后 Agent 场景兴起：用户要能中途打断生成、批准/驳回工具调用、多轮引导——这些都要求客户端在同一条连接里随时"往回发信号"，纯 SSE 天生做不到**
+LangGraph / CrewAI / AutoGen 这类 Agent 框架的本质是"模型提议动作、等人批准"的双向模式；SSE 只支持服务端→客户端单向推送，客户端想插话（打断/确认）只能另开一次 HTTP 请求，做不到在生成过程中同一条连接内实时介入。一个具体例子：MCP（Model Context Protocol）在 **2025 年 3 月 26 日的规范修订**中正式弃用了原来的 HTTP+SSE 传输（拆成 POST 发消息、SSE 收消息两个通道，人为割裂双向交互，且 Serverless 部署下长连接易掉线/会话失步），改用 **Streamable HTTP**（单个端点，按需可将响应升级为 SSE 流）。
+
+**✅ 尚无定论：一部分场景往 WebSocket／混合架构走，一部分坚持 SSE 足够**
+业界目前是两派并存，还没收敛：Google（Gemini 实时多模态 Agent）、AWS Bedrock AgentCore（2025 年 12 月上线双向流式）等采用 WebSocket 全双工，部分生产系统甚至"WebSocket 做控制通道 + SSE 做数据通道"混合；但也有观点坚持 SSE 更优——无状态、无需粘性会话、天然被负载均衡器/CDN 支持，而 WebSocket 升级协议后反而用不上 HTTP/2 多路复用。
+
+**现状：纯文字问答场景，SSE/流式 fetch 依然是最简单够用的方案；但 Agent 场景（打断/工具调用确认/多轮交互）的选型正在演化中，核心问题已从"SSE 还是 WebSocket"变成"这个场景需不需要客户端在生成过程中主动插话"**
+不要死记"大模型对话 = SSE"，先看清楚这是纯问答还是需要中途交互的 Agent 场景，再决定要不要上双向能力。
 
 ## 参考资料
 
 - [MDN — Server-Sent Events](https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events)
 - [RFC 6455 — The WebSocket Protocol（2011）](https://www.rfc-editor.org/rfc/rfc6455)
 - [RFC 7540 — HTTP/2（2015）](https://www.rfc-editor.org/rfc/rfc7540)
+- [WebSocket.org — WebSockets and AI: Why LLMs Are Moving Beyond SSE](https://websocket.org/guides/websockets-and-ai/)
+- [Why MCP Deprecated SSE and Went with Streamable HTTP（MCP 规范 2025-03-26 修订）](https://blog.fka.dev/blog/2025-06-06-why-mcp-deprecated-sse-and-go-with-streamable-http/)
+- [Google Developers Blog — Beyond Request-Response: Architecting Real-time Bidirectional Streaming Multi-agent System](https://developers.googleblog.com/en/beyond-request-response-architecting-real-time-bidirectional-streaming-multi-agent-system/)
+- [Procedure.tech — The Streaming Backbone of LLMs: Why SSE Still Wins（反方观点，供对照）](https://procedure.tech/blogs/sse-for-llms/)
